@@ -1,0 +1,12 @@
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    border-radius: 12px;
+}
+
+button.btn {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}

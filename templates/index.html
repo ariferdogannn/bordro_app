@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Bordro Gönderim Paneli</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h1>Bordro Gönderim Paneli</h1>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul>
+      {% for category, msg in messages %}
+        <li class="{{ category }}">{{ msg }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<h2>Aktif Kullanıcılar</h2>
+<table border="1" cellpadding="5">
+<tr>
+<th>İsim</th>
+<th>Email</th>
+<th>Aktif</th>
+</tr>
+{% for user in users %}
+<tr>
+<td>{{ user.full_name }}</td>
+<td>{{ user.email }}</td>
+<td>{{ 'Evet' if user.active else 'Hayır' }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<h2>Kullanıcı Ekle</h2>
+<form method="POST" action="{{ url_for('add_user_route') }}">
+  <label>İsim: <input type="text" name="full_name" required></label><br>
+  <label>Email: <input type="email" name="email" required></label><br>
+  <label>Aktif: 
+    <select name="active">
+      <option value="1" selected>Evet</option>
+      <option value="0">Hayır</option>
+    </select>
+  </label><br>
+  <button type="submit">Ekle</button>
+</form>
+
+<h2>Bordroları Gönder</h2>
+<form method="POST" action="{{ url_for('index') }}">
+  <button type="submit">Gönder</button>
+</form>
+
+</body>
+</html>
