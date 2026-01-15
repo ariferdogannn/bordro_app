@@ -2,6 +2,8 @@ from employee_store import read_employees
 from services.drive_service import get_current_month_pdfs, download_pdf
 from payroll_store import already_sent, log_sent
 from config import current_year_month
+import unicodedata
+import re
 
 def send_payrolls():
     year, month = current_year_month()
@@ -22,7 +24,6 @@ def send_payrolls():
         if already_sent(emp["email"], year, month):
             continue
 
-        # 🔜 burada Drive + Gmail olacak
         print(f"[TEST] Bordro gönderilecek → {emp['email']}")
 
         log_sent(emp["email"], year, month)
@@ -30,10 +31,25 @@ def send_payrolls():
 
     return report
 
+def normalize_text(text: str) -> str:
+    if not text:
+        return ""
+
+    text = unicodedata.normalize("NFKD", text)
+    text = text.encode("ascii", "ignore").decode("utf-8")
+
+
+    text = text.lower()
+
+    text = re.sub(r"[^a-z0-9]", "", text)
+
+    return text
+
+
 def match_users_to_pdfs():
     year, month = current_year_month()
     users = read_employees()
-    pdfs = get_current_month_pdfs()  # {"Arif Sami Erdoğan.pdf": file_id}
+    pdfs = get_current_month_pdfs()  
 
     matched = []
     report = {
@@ -48,14 +64,23 @@ def match_users_to_pdfs():
             report["inactive"].append(user["full_name"])
             continue
 
-        pdf_name = f"{user['full_name']}.pdf"
-        if pdf_name in pdfs:
-            matched.append({
-                "user": user,
-                "file_id": pdfs[pdf_name]
-            })
-            report["matched"] += 1
-        else:
+        user_key = normalize_text(user["full_name"])
+        found = False
+
+        for pdf in pdfs:
+            pdf_key = normalize_text(pdf["name"])
+
+            if user_key in pdf_key:
+                matched.append({
+                    "user": user,
+                    "file_id": pdf["id"],
+                    "file_name": pdf["name"]
+                })
+                report["matched"] += 1
+                found = True
+                break
+
+        if not found:
             report["missing_pdf"].append(user["full_name"])
 
     return matched, report
