@@ -34,12 +34,27 @@ def send_payrolls():
 def normalize_text(text: str) -> str:
     if not text:
         return ""
+<<<<<<< HEAD
     text = unicodedata.normalize("NFKD", text)
     text = text.encode("ascii", "ignore").decode("utf-8")
     text = text.lower()
     text = re.sub(r"[^a-z0-9]", "", text)
     return text
 
+=======
+
+    text = unicodedata.normalize("NFKD", text)
+    text = text.encode("ascii", "ignore").decode("utf-8")
+
+
+    text = text.lower()
+
+    text = re.sub(r"[^a-z0-9]", "", text)
+
+    return text
+
+
+>>>>>>> 9983693a8940350d50fde4df25738f3c2c535b4e
 def match_users_to_pdfs():
     year, month = current_year_month()
     users = read_employees()
@@ -58,24 +73,41 @@ def match_users_to_pdfs():
             report["inactive"].append(user.get("full_name", "Unknown"))
             continue
 
+<<<<<<< HEAD
         user_key = normalize_text(user.get("full_name", ""))
         found = False
 
         for pdf_name, pdf_id in pdfs.items():  # dict items kullan
             pdf_key = normalize_text(pdf_name)
+=======
+        user_key = normalize_text(user["full_name"])
+        found = False
+
+        for pdf in pdfs:
+            pdf_key = normalize_text(pdf["name"])
+>>>>>>> 9983693a8940350d50fde4df25738f3c2c535b4e
 
             if user_key in pdf_key:
                 matched.append({
                     "user": user,
+<<<<<<< HEAD
                     "file_name": pdf_name,
                     "file_id": pdf_id
+=======
+                    "file_id": pdf["id"],
+                    "file_name": pdf["name"]
+>>>>>>> 9983693a8940350d50fde4df25738f3c2c535b4e
                 })
                 report["matched"] += 1
                 found = True
                 break
 
         if not found:
+<<<<<<< HEAD
             report["missing_pdf"].append(user.get("full_name", "Unknown"))
+=======
+            report["missing_pdf"].append(user["full_name"])
+>>>>>>> 9983693a8940350d50fde4df25738f3c2c535b4e
 
     return matched, report
 
