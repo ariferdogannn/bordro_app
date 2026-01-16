@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from send_payroll import send_payroll_mails
+import os
+from dotenv import load_dotenv
 
+load_dotenv() 
 
 app = Flask(__name__)
 app.secret_key = "bordro-secret"
@@ -24,6 +27,7 @@ def send():
         "missing": len(report.get("missing_pdf", []))
     }
 
+print("Client ID: ", os.getenv("GOOGLE_CLIENT_ID"))
 
 if __name__ == "__main__":
      app.run(host="0.0.0.0", port=5000, debug=False)

@@ -1,4 +1,5 @@
 # Secrets
 token.pickle
+token_gmail.pickle
 .env
 .env.*
