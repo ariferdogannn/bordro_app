@@ -40,5 +40,7 @@ def send_payroll_mails():
         body=report_body
     )
 
+    return report
+
 if __name__ == "__main__":
     send_payroll_mails()

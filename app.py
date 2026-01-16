@@ -17,8 +17,12 @@ def dashboard():
 @app.route("/send", methods=["POST"])
 def send():
     report = send_payroll_mails()
-    flash(report)
-    return redirect(url_for("dashboard"))
+
+    return {
+        "total": report.get("total", 0),
+        "sent": report.get("sent", 0),
+        "missing": len(report.get("missing_pdf", []))
+    }
 
 
 if __name__ == "__main__":

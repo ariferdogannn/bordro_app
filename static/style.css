@@ -10,3 +10,26 @@ button.btn {
     font-weight: 600;
     letter-spacing: 0.3px;
 }
+
+.custom-navbar {
+    background-color: #2d358c; 
+}
+
+.custom-btn {
+    background-color: #2d358c;
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+}
+
+.custom-btn:hover {
+    background-color: #092f4a;
+    transform: translateY(-1px);
+}
+
+.custom-btn:active {
+    background-color: #072538;
+    transform: translateY(0);
+}

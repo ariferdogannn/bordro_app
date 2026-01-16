@@ -64,7 +64,11 @@ def get_current_month_pdfs():
         raise Exception(f"{month} klasörü bulunamadı")
 
     results = service.files().list(
-        q=f"'{month_folder}' in parents and mimeType='application/pdf'",
+        q=(
+            f"'{month_folder}' in parents "
+            f"and mimeType='application/pdf' "
+            f"and trashed = false"
+        ),
         corpora='drive',
         driveId=SHARED_DRIVE_ID,
         includeItemsFromAllDrives=True,
